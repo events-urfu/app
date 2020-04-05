@@ -291,13 +291,7 @@ J-A-V-A-S-C-R-I-P-T-=====================
 T-I-P-A--A-D-A-P-T-I-V-A-==================
 ==========================================*/
 
-@media (max-width:1200px) {
-    .wrapper {
-        max-width:970px;
-    }
-}
-
-@media (max-width:1055px) {
+@media (max-width:917px) {
     .wrapper ul {
         text-align: center;
         display: flex;
@@ -306,12 +300,34 @@ T-I-P-A--A-D-A-P-T-I-V-A-==================
         width: 100%;
     }
 
+    .community,
+    .website {
+        margin-left:115px;
+    }
+
+    .community p,
+    .website p {
+        max-height:10px;
+    }
+
+    .website {
+        margin-bottom:100px;
+    }
+
+    .community {
+        margin-bottom:60px;
+    }
+
     .wrapper ul li {
-        margin-top:15px;
+        margin-top:17px;
     }
 
     .wrapper {
-        max-width:950px;
+        max-width:774px;
+    }
+
+    .main-block .wrapper {
+        max-width:730px;
     }
 
     .pic-logo {
@@ -319,32 +335,76 @@ T-I-P-A--A-D-A-P-T-I-V-A-==================
     }
 
     .pic-search {
-        top:100px;
+        top:103px;
     }
-}
 
-@media (max-width:944px) {
-    .wrapper
-    {
-        max-width:840px;
-    }
-}
-
-@media (max-width:810px) {
-    .wrapper {
-        max-width:568px;
+    .out-block {
+        height:auto;
     }
 
     .block-week-month-date,
     .time {
         height:auto;
     }
+}
+
+@media (max-width:773px) {
+    .main-block .wrapper {
+        max-width:700px;
+    }
+}
+
+@media (max-width:584px) {
+    .block-week-month-date,
+    .time {
+        height:auto;
+    }
+
+    footer .wrapper {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .block-week-month-date {
+        height:auto;
+        width:40%;
+        margin-bottom:25px;
+        margin-left:35px;
+    }
 
     .block-week-month-date button {
+        display:block;
         margin-top:10px;
     }
 
-    .out-block {
+    .time p {
+        width:auto;
         height:auto;
+        text-align:center;
+    }
+
+    .time {
+        margin-left:20px;
+    }
+}
+
+@media (max-width:373px) {
+    .main-block .wrapper {
+        min-width:350px;
+    }
+
+    .time {
+        margin-right:10px;
+    }
+
+    .block-week-month-date {
+        margin-right:50px;
+    }
+
+    footer, header {
+        min-width:350px;
     }
 }
