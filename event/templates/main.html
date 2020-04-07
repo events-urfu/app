@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,15 +6,15 @@
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <meta name="viewport" content="width=device-width">
 </head>
 <body>
 <header>
     <div class="wrapper">
         <ul>
-            <li class="logo"><a href="main.html"><img class="pic-logo" src="img/logo_1.png"></a></li>
-            <li><img class='pic-search' src="img/search.png"><input class="search" placeholder="Поиск по мероприятиям"></li>
+            <li class="logo"><a href="main.html"><img class="pic-logo" src="{% static 'img/logo_1.png' %}"></a></li>
+            <li><img class='pic-search' src="{% static 'img/search.png' %}"><input class="search" placeholder="Поиск по мероприятиям"></li>
             <li class="sign-in"><a href="#">Вход</a></li>
         </ul>
     </div>
@@ -106,6 +107,6 @@
             <div class="website"><p>Страница на сайте</p></div>
    </div>
 </footer>
-<script src="js/script.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
 </body>
 </html>
