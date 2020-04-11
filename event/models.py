@@ -3,12 +3,12 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Event(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     description = models.TextField()
     date = models.DateTimeField()
     place = models.CharField(max_length=200)
-    image = models.ImageField(width_field=400, height_field=300)
+    image = models.ImageField(upload_to='event/static/img/event_images')
+    paticipants = models.ManyToManyField(User)
 
 
 class Profile(models.Model):
