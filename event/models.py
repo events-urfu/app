@@ -8,12 +8,32 @@ class Event(models.Model):
     date = models.DateTimeField()
     place = models.CharField(max_length=200)
     image = models.ImageField(upload_to='event/static/img/event_images')
-    paticipants = models.ManyToManyField(User)
+    paticipants = models.ManyToManyField('Participant', blank=True)
+    pb_id = models.ForeignKey('Subdivision', on_delete=models.CASCADE, parent_link=True, null=True)
 
+    def __str__(self):
+        return str(self.title)
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class Subdivision(models.Model):
     name = models.CharField(max_length=100)
-    surname = models.CharField(max_length=200)
-    patronymic = models.CharField(max_length=200)
-    admin = models.BooleanField()
+    members = models.ManyToManyField('PBMember', blank=True)
+
+    def __str__(self):
+        return str(self.name)
+
+class Participant(models.Model):
+    STATUS = ((1, "+"), (2, "-"), (3, "None"))
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    status = models.IntegerField(choices=STATUS)
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE, parent_link=True)
+
+    def __str__(self):
+        return str(self.user.__str__())
+
+
+class PBMember(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    pb_id = models.ForeignKey(Subdivision, on_delete=models.CASCADE, parent_link=True, null=True)
+
+    def __str__(self):
+        return str(self.user.__str__())

@@ -1,4 +1,4 @@
-"""urfuevents URL Configuration
+"""urfu-events URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -23,7 +23,6 @@ router.register(r'api/event', views.EventViewSet)
 
 urlpatterns = [
     url('admin/', admin.site.urls),
-    url('main/', views.main, name='main'),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
 ]
