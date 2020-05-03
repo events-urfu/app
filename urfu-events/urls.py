@@ -17,12 +17,14 @@ from event import views
 from django.contrib import admin
 from django.conf.urls import url, include
 from rest_framework import routers
+from social_core.backends.vk import VKOAuth2
 
 router = routers.SimpleRouter()
-router.register(r'api/event', views.EventViewSet)
+router.register(r'api/events', views.ViewSetEvent, basename='events')
 
 urlpatterns = [
     url('admin/', admin.site.urls),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^social/', include('social_django.urls')),
 ]
