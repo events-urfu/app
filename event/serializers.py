@@ -8,11 +8,9 @@ class EventsSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('url', 'title', 'date', 'place', 'image')
 
 class InstanceSerializer(serializers.HyperlinkedModelSerializer):
-    participants_count = serializers.IntegerField(source='get_count')
-
     class Meta:
         model = Event
-        fields = ('title', 'description', 'date', 'place', 'image', 'participants_count')
+        fields = ('title', 'description', 'date', 'place', 'image')
 
 
 def get_count(obj):

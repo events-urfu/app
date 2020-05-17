@@ -3,3 +3,8 @@ db.sqlite3
 __pychache__
 .idea
 .venv
+venv/
+
+urfu-events/__pycache__/
+
+urfu-events/__init__.py

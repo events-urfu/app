@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, Participant, Subdivision, PBMember
+from .models import Event, Participant, Subdivision, PBMember, Profile
 # Register your models here.
 
 class ParticipantInline(admin.TabularInline):
@@ -15,7 +15,6 @@ class EventAdmin(admin.ModelAdmin):
     inlines = [ParticipantInline]
     exclude = ['participants']
 
-
 @admin.register(PBMember)
 class PBMemberAdmin(admin.ModelAdmin):
     list_filter = ['pb_id']
@@ -25,3 +24,4 @@ class SubdivisionAdmin(admin.ModelAdmin):
     inlines = [PBMembersInline]
 
 admin.site.register(Participant)
+admin.site.register(Profile)
