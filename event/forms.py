@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event, Profile
+from .models import Event
 
 class CreateEventForm(forms.Form):
     class Meta:

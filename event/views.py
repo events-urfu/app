@@ -1,40 +1,122 @@
-from django.shortcuts import render
-from rest_framework import viewsets, permissions, exceptions
-from .models import Event
-from .serializers import EventSerializer
+import json
 
-# Create your views here.
-def main(request):
-    events = []
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth.views import auth_logout
+from rest_framework import viewsets, permissions, exceptions, filters
+from rest_framework.response import Response
+from django.http import HttpResponse, HttpResponseBadRequest, HttpRequest
+from django.core.mail import send_mail
+from django.shortcuts import redirect
+from social_django.views import login
+from json import dumps
+from django.views.decorators.csrf import csrf_exempt
 
-    return render(
-        request,
-        "main.html",
-        {
-            "events": events,
-        }
-    )
+from .models import Event, Participant, CustomUserSocialAuth, Profile, User
+from .serializers import EventsSerializer, InstanceSerializer
+from .paginators import StandardResultsSetPagination
+from rest_framework.request import Request
 
-class EventViewSet(viewsets.ModelViewSet):
+class ViewSetEvent(viewsets.ModelViewSet):
     """
     API endpoint that allows abilities to be viewed or edited.
     """
-    queryset = Event.objects.all().order_by('title')
-    serializer_class = EventSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    search_fields = ['title']
+    filter_backends = (filters.SearchFilter,)
+    permission_classes = [permissions.AllowAny]
 
-    def create_event(self,serializer):
-        admin=self.request.user
-        if admin.profile.admin:
-            serializer.save()
+    def list(self, request):
+        serializer_context = {
+            'request': request,
+        }
+        queryset = self.get_queryset()
+        serializer = EventsSerializer(queryset, many=True, context=serializer_context)
+        return Response(serializer.data)
+
+    def search(self, request):
+        serializer_context = {
+            'request':request,
+        }
+        queryset = self.get_queryset(None, request.GET.get('search'))
+        serializer = EventsSerializer(queryset, many=True, context=serializer_context)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk):
+        queryset = self.get_queryset(pk)
+        serializer = InstanceSerializer(queryset)
+        return Response(serializer.data)
+
+    def get_queryset(self, pk = None, key = None):
+        if self.action == 'list':
+            return Event.objects.all().order_by('-date')
+        if self.action == 'retrieve':
+            return Event.objects.get(pk=pk)
+        if self.action == 'search':
+            return Event.objects.all().filter(title__startswith=key)
+        return Event.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'list' or self.action == 'search':
+            return EventsSerializer
+        if self.action == 'retrieve':
+            return InstanceSerializer
+        return EventsSerializer
+
+def sign_up(request):
+    data = {
+        'status': False
+    }
+    if request.method == "POST":
+        email = request.POST["email"]
+        password = request.POST["password"]
+        if not (User.objects.filter(email=email).exists() or User.objects.filter(email=email).exists()):
+            User.objects.create_user(email, password)
+            user = authenticate(email=email, password=password)
+            login(request, user)
+            return HttpResponse(dumps(data))
         else:
-            raise PermissionDenied("You are not authorized to create Events. Update your profile!")
+            raise HttpResponse(
+                'Looks like a username with that email or password already exists')
 
-    def delete_event(self):
-        Event_instance=self.get_object()
-        user=self.request.user
+def log_in(request):
+    data = {
+        'status': False
+    }
+    if request.method == "POST":
+        user = authenticate(username=request.POST["email"], password=request.POST["password"])
+        try:
+            login(request, user)
+            return HttpResponse(dumps(data))
+        except AttributeError:
+            return redirect('/login')
 
-        if user.is_staff:
-            Event_instance.delete()
-        else:
-            raise ValidationError("Sorry you are not authorized to delete this Event!")
+def log_out(request):
+    logout(request)
+    return HttpResponse("You are successfully logged out")
+
+@csrf_exempt
+def add_participant(request):
+    data = {
+        'status': False
+    }
+    if request.method == "POST":
+        if request.user.is_authenticated():
+            profile = Profile.objects.get(user=request.user)
+            profile.patronymic = request.POST["name"].Split()[2]
+            profile.group = request.POST["group"]
+            participant = Participant()
+            participant.user = request.user
+            participant.event_id = request.GET.get("event_id")
+            participant.save()
+            data["status"] = True
+        return HttpResponse(dumps(data))
+    return HttpResponse("This URL shouldn't be accessed with web browser")
+
+@csrf_exempt
+def send_message(request):
+    if request.user.is_authenticated():
+        event = Event.objects.get(pk = request.GET.get("event_id"))
+        send_mail(event.title,
+    'Вы успешно записались на ' + event.title,
+    'urfu-events@example.com',
+    [request.user.email],
+    fail_silently=False,)

@@ -1,4 +1,4 @@
-"""urfuevents URL Configuration
+"""urfu-events URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -16,14 +16,21 @@ Including another URLconf
 from event import views
 from django.contrib import admin
 from django.conf.urls import url, include
+from django.contrib.auth import logout
 from rest_framework import routers
+from social_core.backends.vk import VKOAuth2
 
 router = routers.SimpleRouter()
-router.register(r'api/event', views.EventViewSet)
+router.register(r'api/events', views.ViewSetEvent, basename='event')
 
 urlpatterns = [
     url('admin/', admin.site.urls),
-    url('main/', views.main, name='main'),
     url(r'^', include(router.urls)),
+    url(r'^send_mail/', views.send_message),
+    url(r'^add_participant/', views.add_participant),
     url(r'^api-auth/', include('rest_framework.urls')),
+    url(r'^social/', include('social_django.urls')),
+    url(r'^login/$', views.log_in, name='login'),
+    url(r'^logout/$', views.log_out, name='logout'),
+    url(r'^sign_up/$', views.sign_up)
 ]
