@@ -24,9 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = False
+#bool( os.environ.get('DJANGO_DEBUG', True) )
+#DJANGO_DEBUG=''
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','localhost']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','localhost','*']
 
 
 # Application definition

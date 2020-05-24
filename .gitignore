@@ -8,3 +8,5 @@ venv/
 urfu-events/__pycache__/
 
 urfu-events/__init__.py
+
+event/__pycache__/
