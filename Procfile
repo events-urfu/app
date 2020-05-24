@@ -1,1 +1,1 @@
-web: gunicorn urfu-events.asgi --log-file -
+web: gunicorn urfu-events :app
